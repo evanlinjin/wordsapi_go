@@ -3,6 +3,11 @@ package wordsapi
 const LO_FREQ_SCORE float32 = 1.74
 const HI_FREQ_SCORE float32 = 8.03
 
+func MakeSearchParameters() (p SearchParameters) {
+	p.Fix()
+	return
+}
+
 type SearchParameters struct {
 	FrequencyMax         float32  // The max freq score. RANGE: 1.74 - 8.03.
 	FrequencyMin         float32  // The min freq score. RANGE: 1.74 - 8.03.
