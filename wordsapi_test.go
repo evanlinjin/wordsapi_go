@@ -1,6 +1,11 @@
 package wordsapi
 
-import "testing"
+import (
+	"io/ioutil"
+	"log"
+	"strings"
+	"testing"
+)
 
 type Test struct {
 	Word string
@@ -12,7 +17,7 @@ func TestGetAlso(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		SetApiKey("FeSXUfZdLEmsh95s3xjvM6XopgmEp13MK0cjsnDCPEBOyBh9Vc")
+		SetApiKey(GetKeyFromFile())
 		got, err := GetAlso(c.Word)
 		if err != nil || got.Word != c.Word {
 			t.Errorf("GetAlso(%q) -> %q ! ERR: %q", c.Word, got.Word, err)
@@ -21,9 +26,19 @@ func TestGetAlso(t *testing.T) {
 }
 
 func TestGetRandom(t *testing.T) {
-	SetApiKey("FeSXUfZdLEmsh95s3xjvM6XopgmEp13MK0cjsnDCPEBOyBh9Vc")
+	SetApiKey(GetKeyFromFile())
 	got, err := GetRandom()
 	if err != nil {
 		t.Errorf("GetRandom() -> %q ! ERR: %q", got.Word, err)
 	}
+}
+
+func GetKeyFromFile() (key string) {
+	fileData, e := ioutil.ReadFile("api.key")
+	if e != nil {
+		log.Fatalln(e)
+		return
+	}
+	key = strings.TrimSpace(string(fileData))
+	return
 }
