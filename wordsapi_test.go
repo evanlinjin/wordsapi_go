@@ -19,3 +19,11 @@ func TestGetAlso(t *testing.T) {
 		}
 	}
 }
+
+func TestGetRandom(t *testing.T) {
+	SetApiKey("FeSXUfZdLEmsh95s3xjvM6XopgmEp13MK0cjsnDCPEBOyBh9Vc")
+	got, err := GetRandom()
+	if err != nil {
+		t.Errorf("GetRandom() -> %q ! ERR: %q", got.Word, err)
+	}
+}

@@ -1,52 +1,41 @@
 package wordsapi
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"net/url"
+	"strconv"
+	"strings"
 )
 
-type Result struct {
-	Definition   string   `json:"definition"`
-	Derivation   []string `json:"derivation"`
-	PartOfSpeech string   `json:"partOfSpeech"`
-	Synonyms     []string `json:"synonyms"`
-	TypeOf       []string `json:"typeOf"`
-}
-
-type WordResponse struct {
-	Word    string   `json:"word"`
-	Results []Result `json:"results"`
-}
-
-func (rm *WordResponse) fill(path string, query url.Values) (err error) {
-	u := url.URL{
-		Scheme:   "https",
-		Host:     "wordsapiv1.p.mashape.com",
-		Path:     "words/" + path,
-		RawQuery: query.Encode(),
-	}
-	fmt.Println(u.String())
-
-	req, _ := http.NewRequest("GET", u.String(), nil)
-	req.Header.Add("X-Mashape-Key", key)
-	req.Header.Add("Accept", "application/json")
-
-	resp, _ := client.Do(req)
-	if resp.StatusCode != 200 {
-		err = &ServerResponseError{resp.StatusCode}
-	}
-
-	p := make([]byte, resp.ContentLength)
-	resp.Body.Read(p)
-	json.Unmarshal(p, &rm)
-
-	return
-}
-
 func GetRandom() (r WordResponse, e error) {
-	q := url.Values{}
-	q.Set("random", "true")
-	return r, r.fill("", q)
+	return r, r.fill("", [2]string{"random", "true"})
+}
+
+func GetSearch(p SearchParameters) (r WordResponse, e error) {
+	e = p.Check()
+	if e != nil {
+		return
+	}
+	return r, r.fill(
+		"",
+		[2]string{"frequencymax", strconv.FormatFloat(float64(p.FrequencyMax), 'f', 2, 32)},
+		[2]string{"frequencymin", strconv.FormatFloat(float64(p.FrequencyMin), 'f', 2, 32)},
+		[2]string{"hasDetails", strings.Join(p.HasDetails, ",")},
+		[2]string{"frequencymax", p.LetterPattern},
+		[2]string{"frequencymax", strconv.Itoa(int(p.Letters))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.LettersMax))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.LettersMin))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.Limit))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.Page))},
+		[2]string{"frequencymax", p.PartOfSpeech},
+		[2]string{"frequencymax", p.PronunciationPattern},
+		[2]string{"frequencymax", strconv.Itoa(int(p.Sounds))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.SoundsMax))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.SoundsMin))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.Syllables))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.SyllablesMax))},
+		[2]string{"frequencymax", strconv.Itoa(int(p.SyllablesMin))},
+	)
+}
+
+func GetWord(word string) (r WordResponse, e error) {
+	return r, r.fill(word)
 }

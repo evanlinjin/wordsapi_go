@@ -26,3 +26,24 @@ func (e *ServerResponseError) Error() string {
 	}
 	return fmt.Sprint("Error", e.Code, ":", msg, ".")
 }
+
+type SearchParametersError struct {
+	FrequencyMaxOkay bool
+	FrequencyMinOkay bool
+	PageOkay         bool
+}
+
+func (e *SearchParametersError) Error() (outStr string) {
+	outStr = "The following parameters are invalid: "
+	switch {
+	case !e.FrequencyMaxOkay:
+		outStr += "FrequencyMax "
+		fallthrough
+	case !e.FrequencyMinOkay:
+		outStr += "FrequencyMin "
+		fallthrough
+	case !e.PageOkay:
+		outStr += "Page "
+	}
+	return
+}
