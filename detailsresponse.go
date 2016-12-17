@@ -6,6 +6,7 @@ import (
 	"net/url"
 )
 
+// Response structure for 'Details Response'.
 type DetailsResponse struct {
 	Word          string        `json:"word"`
 	Also          []string      `json:"also"`          //
@@ -38,6 +39,7 @@ type DetailsResponse struct {
 	Synonyms      []string      `json:"synonyms"` //
 }
 
+// Fills the DetailsResponse with data.
 func (rm *DetailsResponse) fill(path string, queries ...[2]string) (err error) {
 	queryMap := url.Values{}
 	for _, query := range queries {

@@ -6,11 +6,13 @@ import (
 	"net/url"
 )
 
+// Response structure for 'Word Response'.
 type WordResponse struct {
 	Word    string   `json:"word"`
 	Results []Result `json:"results"`
 }
 
+// Fills the WordResponse with data.
 func (rm *WordResponse) fill(path string, queries ...[2]string) (err error) {
 	queryMap := url.Values{}
 	for _, query := range queries {

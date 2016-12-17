@@ -2,6 +2,7 @@ package wordsapi
 
 import "fmt"
 
+// Error structure used when wordsapi servers return error.
 type ServerResponseError struct {
 	Code int
 }
@@ -27,6 +28,7 @@ func (e *ServerResponseError) Error() string {
 	return fmt.Sprint("Error", e.Code, ":", msg, ".")
 }
 
+// Error structure used when search parameters are invalid.
 type SearchParametersError struct {
 	FrequencyMaxOkay bool
 	FrequencyMinOkay bool
