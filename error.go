@@ -49,3 +49,36 @@ func (e *SearchParametersError) Error() (outStr string) {
 	}
 	return
 }
+
+type ParameterError struct {
+	pType     string
+	pCrrValue interface{}
+	pErrValue interface{}
+	pValidMin interface{}
+	pValidMax interface{}
+}
+
+func (e *ParameterError) Error() string {
+	switch e.pType {
+	case "HasDetails":
+		return fmt.Sprint(
+			"Parameter", e.pType,
+			"needs to be of values: [", e.pValidMax, "] .",
+			"You put:", e.pErrValue, ".",
+			"Value changed to:", e.pCrrValue, ".",
+		)
+	case "Letters":
+		return fmt.Sprint(
+			"Parameters", e.pType,
+			"needs",
+		)
+	default:
+		return fmt.Sprint(
+			"Parameter", e.pType,
+			"needs to be in range: [", e.pValidMin, ":", e.pValidMax, "] .",
+			"You put:", e.pErrValue, ".",
+			"Value left as:", e.pCrrValue, ".",
+		)
+	}
+
+}
