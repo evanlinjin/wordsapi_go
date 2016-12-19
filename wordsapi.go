@@ -25,3 +25,16 @@ func SetApiKeyFromFile() {
 type Response interface {
 	fill(string, ...[2]string) error
 }
+
+// Manually reads in the http.Response data if ContentLength is undefined.
+func manualReadHttpResponse(resp *http.Response) (out []byte) {
+	p := make([]byte, 1)
+	for {
+		_, e := resp.Body.Read(p)
+		if e != nil {
+			break
+		}
+		out = append(out, p[0])
+	}
+	return
+}

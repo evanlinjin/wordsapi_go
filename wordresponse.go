@@ -37,12 +37,11 @@ func (rm *WordResponse) fill(path string, queries ...[2]string) (err error) {
 	var p []byte
 	switch resp.ContentLength {
 	case -1:
-		p = make([]byte, 2000)
+		p = manualReadHttpResponse(resp)
 	default:
 		p = make([]byte, resp.ContentLength)
+		resp.Body.Read(p)
 	}
-
-	resp.Body.Read(p)
 	json.Unmarshal(p, &rm)
 
 	return

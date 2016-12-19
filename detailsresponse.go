@@ -2,6 +2,7 @@ package wordsapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -52,6 +53,7 @@ func (rm *DetailsResponse) fill(path string, queries ...[2]string) (err error) {
 		RawQuery: queryMap.Encode(),
 	}
 
+	fmt.Println("URL:", u.String())
 	req, _ := http.NewRequest("GET", u.String(), nil)
 	req.Header.Add("X-Mashape-Key", key)
 	req.Header.Add("Accept", "application/json")
@@ -61,8 +63,14 @@ func (rm *DetailsResponse) fill(path string, queries ...[2]string) (err error) {
 		err = &ServerResponseError{resp.StatusCode}
 	}
 
-	p := make([]byte, resp.ContentLength)
-	resp.Body.Read(p)
+	var p []byte
+	switch resp.ContentLength {
+	case -1:
+		p = manualReadHttpResponse(resp)
+	default:
+		p = make([]byte, resp.ContentLength)
+		resp.Body.Read(p)
+	}
 	json.Unmarshal(p, &rm)
 
 	return
