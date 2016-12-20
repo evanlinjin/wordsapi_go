@@ -11,7 +11,7 @@ var key string = ""
 var client *http.Client = &http.Client{}
 
 // Sets the api key to 'str'.
-func SetApiKey(str string) { key = str }
+func SetApiKey(str string) { key = strings.TrimSpace(str) }
 
 func SetApiKeyFromFile() {
 	fileData, e := ioutil.ReadFile("api.key")
