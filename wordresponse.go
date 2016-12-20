@@ -2,6 +2,7 @@ package wordsapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -30,6 +31,7 @@ func (rm *WordResponse) fill(path string, queries ...[2]string) (err error) {
 	req.Header.Add("Accept", "application/json")
 
 	resp, _ := client.Do(req)
+	fmt.Println("resp.StatusCode", resp.StatusCode)
 	if resp.StatusCode != 200 {
 		err = &ServerResponseError{resp.StatusCode}
 	}
